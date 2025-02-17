@@ -1,0 +1,8 @@
+{
+  "scripts": {
+    "mock": "jmockver"
+  },
+  "devDependencies": {
+    "jmockver": "1.0.0"
+  }
+}

@@ -1,0 +1,143 @@
+{
+  "/pokemons": {
+    "GET": {
+      "responseIdToReturn": "RESP001",
+      "responses": [
+        {
+          "id": "RESP001",
+          "statusCode": 200,
+          "sleep": 3000,
+          "body": [
+            {
+              "id": 1,
+              "name": "bulbasaur",
+              "img": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png",
+              "types": [
+                "grass",
+                "poison"
+              ],
+              "abilities": [
+                "overgrow",
+                "chlorophyll"
+              ]
+            },
+            {
+              "id": 2,
+              "name": "ivysaur",
+              "img": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/2.png",
+              "types": [
+                "grass",
+                "poison"
+              ],
+              "abilities": [
+                "overgrow",
+                "chlorophyll"
+              ]
+            },
+            {
+              "id": 4,
+              "name": "charmander",
+              "img": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/4.png",
+              "types": [
+                "grass",
+                "poison"
+              ],
+              "abilities": [
+                "overgrow",
+                "chlorophyll"
+              ]
+            },
+            {
+              "id": 25,
+              "name": "pikachu",
+              "img": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png",
+              "types": [
+                "electric"
+              ],
+              "abilities": [
+                "overgrow",
+                "chlorophyll"
+              ]
+            },
+            {
+              "id": 3,
+              "name": "venusaur",
+              "img": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/3.png",
+              "types": [
+                "grass",
+                "poison"
+              ],
+              "abilities": [
+                "overgrow",
+                "chlorophyll"
+              ]
+            },
+            {
+              "id": 5,
+              "name": "charmeleon",
+              "img": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/5.png",
+              "types": [
+                "fire"
+              ],
+              "abilities": [
+                "blaze",
+                "solarpower"
+              ]
+            },
+            {
+              "id": 15,
+              "name": "beedrill",
+              "img": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/15.png",
+              "types": [
+                "bug",
+                "poison"
+              ],
+              "abilities": [
+                "swarm",
+                "sniper"
+              ]
+            },
+            {
+              "id": 8,
+              "name": "Wartortle",
+              "img": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/8.png",
+              "types": [
+                "bug",
+                "poison"
+              ],
+              "abilities": [
+                "swarm",
+                "sniper"
+              ]
+            },
+            {
+              "id": 55,
+              "name": "golduck",
+              "img": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/55.png",
+              "types": [
+                "bug",
+                "poison"
+              ],
+              "abilities": [
+                "water"
+              ]
+            },
+            {
+              "id": 92,
+              "name": "gastly",
+              "img": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/92.png",
+              "types": [
+                "bug",
+                "poison"
+              ],
+              "abilities": [
+                "ghost",
+                "poison"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
