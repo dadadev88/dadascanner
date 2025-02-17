@@ -12,7 +12,8 @@ class Scan {
     this.description = '',
     required this.value,
   }) {
-    type = value.contains('http') ? 'URL' : 'LOCATION';
+    bool isURL = value.contains('http') || value.contains('www');
+    type = isURL ? 'URL' : 'LOCATION';
 
     if (type == 'LOCATION') {
       value = value.replaceAll('geo:', '');
@@ -20,7 +21,11 @@ class Scan {
   }
 
   factory Scan.fromMap(Map<String, dynamic> scan) {
-    return Scan(id: scan['id'], value: scan['value'], type: scan['type'], description: scan['description']);
+    return Scan(
+        id: scan['id'],
+        value: scan['value'],
+        type: scan['type'],
+        description: scan['description']);
   }
 
   LatLng getLatLng() {

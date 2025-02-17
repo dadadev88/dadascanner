@@ -1,5 +1,5 @@
 import 'package:dadascanner/providers/preferences_provider.dart';
-import 'package:dadascanner/screens/login_screen.dart';
+import 'package:dadascanner/screens/screens.dart';
 import 'package:dadascanner/utils/preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -23,17 +23,18 @@ class _SidebarState extends State<Sidebar> {
         padding: const EdgeInsets.all(8.0),
         child: ListView(
           children: <Widget>[
-            const Text( 'Preferences', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold) ),
             ListTile(
-              trailing: const Icon(Icons.home),
-              title: const Text('Back to login'),
-              onTap: () {
-                Navigator.pushNamed(context, LoginScreen.routeName);
-              },
+              trailing: const Icon(Icons.logout_rounded),
+              title: const Text('Close session'),
+              onTap: () => Navigator.pushNamedAndRemoveUntil(
+                context,
+                HomeScreen.routeName,
+                (route) => false,
+              ),
             ),
-            const Divider(),
             SwitchListTile.adaptive(
               title: const Text('Dark mode'),
+              subtitle: const Text('Change the app theme'),
               value: isDarkMode,
               onChanged: (value) {
                 setState(() {
@@ -42,8 +43,6 @@ class _SidebarState extends State<Sidebar> {
                 });
               },
             ),
-            const Divider(),
-            const Text('Theme style'),
             RadioListTile<int>.adaptive(
               title: const Text('Material 3'),
               value: 1,
@@ -63,44 +62,6 @@ class _SidebarState extends State<Sidebar> {
   }
 
   void _changeThemeStyle(PreferencesProvider preferences, int value) {
-    setState(() {
-      preferences.setMaterial3Enable(value);
-    });
+    setState(() => preferences.setMaterial3Enable(value));
   }
 }
-
-/* TextButton.icon(
-            onPressed: () {
-              Provider.of<PreferencesProvider>(context, listen: false)
-                  .setThemeMode(ThemeMode.dark);
-            },
-            icon: const Icon(Icons.dark_mode_outlined),
-            label: const Text('Dark Mode'),
-          ),
-          const Divider(),
-          TextButton.icon(
-            onPressed: () {
-              Provider.of<PreferencesProvider>(context, listen: false)
-                  .setThemeMode(ThemeMode.light);
-            },
-            icon: const Icon(Icons.light_mode),
-            label: const Text('Light Mode'),
-          ),
-          const Divider(),
-          TextButton.icon(
-            onPressed: () {
-              Provider.of<PreferencesProvider>(context, listen: false)
-                  .setMaterial3Enable(true);
-            },
-            icon: const Icon(Icons.format_paint_sharp),
-            label: const Text('Material 3'),
-          ),
-          const Divider(),
-          TextButton.icon(
-            onPressed: () {
-              Provider.of<PreferencesProvider>(context, listen: false)
-                  .setMaterial3Enable(false);
-            },
-            icon: const Icon(Icons.format_paint_outlined),
-            label: const Text('Material 2'),
-          ) */

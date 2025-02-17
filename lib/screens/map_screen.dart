@@ -29,15 +29,18 @@ class _MapScreenState extends State<MapScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(scan.value),
+        title: Text(scan.description == '' ? 'Location' : scan.description),
       ),
-      body: GoogleMap(
-        mapType: _mapType,
-        initialCameraPosition: position,
-        onMapCreated: (GoogleMapController controller) {
-          _controller.complete(controller);
-        },
-        markers: {getMarker(scan)},
+      body: SafeArea(
+        maintainBottomViewPadding: true,
+        child: GoogleMap(
+          mapType: _mapType,
+          initialCameraPosition: position,
+          onMapCreated: (GoogleMapController controller) {
+            _controller.complete(controller);
+          },
+          markers: {getMarker(scan)},
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _changeLayerType,

@@ -1,130 +1,131 @@
-import 'package:dadascanner/screens/map_screen.dart';
+import 'package:dadascanner/screens/screens.dart';
+import 'package:dadascanner/utils/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
-import 'package:provider/provider.dart';
 
-import 'package:dadascanner/widgets/widgets.dart';
-import 'package:dadascanner/providers/providers.dart';
-import 'package:dadascanner/utils/url_utils.dart';
-import 'package:dadascanner/models/scan_model.dart';
+class AppScreen {
+  String routeName;
+  String title;
+  IconData icon;
+  Color? iconColor;
+
+  AppScreen(
+    this.routeName,
+    this.title,
+    this.icon, {
+    this.iconColor = Colors.white,
+  });
+}
 
 class HomeScreen extends StatelessWidget {
-  static String routeName = 'Home';
-  const HomeScreen({super.key});
+  static String routeName = 'home';
+  final List<AppScreen> screens = [
+    AppScreen(LoginScreen.routeName, 'Sign in', Icons.login,
+        iconColor: Colors.blue),
+    AppScreen(
+        ScanHomeScreen.routeName, 'Scanner', Icons.qr_code_scanner_rounded,
+        iconColor: Colors.green),
+    AppScreen(PokemonsScreen.routeName, 'Pokemons', Icons.pets,
+        iconColor: Colors.red),
+    AppScreen(CapturePokemonScreen.routeName, 'Capture pokemon', Icons.camera,
+        iconColor: Colors.red),
+  ];
+
+  HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    UIProvider uiProvider = Provider.of<UIProvider>(context);
-    ScansProvider scansProvider = Provider.of<ScansProvider>(
-      context,
-      listen: false,
-    );
-
     return Scaffold(
-      drawer: const Sidebar(),
-      appBar: AppBar(title: const Text('DADA Scanner'), actions: [
-        IconButton(
-          onPressed: () => scansProvider.removeByType(),
-          icon: const Icon(Icons.delete_forever),
-        )
-      ]),
-      body: _HomeBody(uiProvider: uiProvider),
-      bottomNavigationBar: _CustomNavigationBar(
-        uiProvider: uiProvider,
-        scansProvider: scansProvider,
-      ),
-      floatingActionButton: _CustomFloatingButton(uiProvider: uiProvider),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-    );
-  }
-}
-
-class _CustomFloatingButton extends StatelessWidget {
-  final UIProvider uiProvider;
-
-  const _CustomFloatingButton({required this.uiProvider});
-
-  @override
-  Widget build(BuildContext context) {
-    return FloatingActionButton(
-      elevation: 0,
-      child: const Icon(Icons.qr_code_rounded),
-      onPressed: () async {
-        String scanData = await FlutterBarcodeScanner.scanBarcode(
-            '#fff', 'Cancelar', true, ScanMode.BARCODE);
-        // String scanData = '-12.121510,-77.028047';
-
-        if (scanData != '-1') {
-          this.handleNewScan(scanData, context);
-        }
-      },
-    );
-  }
-
-  void handleNewScan(String scanData, BuildContext context) async {
-    ScansProvider scanProvider =
-        Provider.of<ScansProvider>(context, listen: false);
-
-    Scan newScan = Scan(value: scanData);
-    await scanProvider.create(newScan);
-    uiProvider.setCurrentFromScan = newScan.type!;
-
-    if (newScan.type == 'URL') {
-      URLUtils.openURL(newScan.value);
-    } else {
-      Navigator.pushNamed(context, MapScreen.routeName, arguments: newScan);
-    }
-  }
-}
-
-class _CustomNavigationBar extends StatelessWidget {
-  final UIProvider uiProvider;
-  final ScansProvider scansProvider;
-
-  const _CustomNavigationBar({
-    required this.scansProvider,
-    required this.uiProvider,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return BottomNavigationBar(
-      currentIndex: uiProvider.currentNavBarIndex,
-      onTap: (int index) {
-        uiProvider.setCurrentNavBarIndex = index;
-        scansProvider.changeCurrentType =
-            uiProvider.currentNavBarIndex == 0 ? 'LOCATION' : 'URL';
-      },
-      items: const [
-        BottomNavigationBarItem(
-          label: 'Locations',
-          icon: Icon(Icons.my_location_sharp),
+      appBar: AppBar(elevation: 0, title: const Text('Screens')),
+      body: SafeArea(
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(10),
+            child: ListView.builder(
+              physics: const BouncingScrollPhysics(),
+              itemCount: screens.length,
+              itemBuilder: _getScreenItem,
+            ),
+          ),
         ),
-        BottomNavigationBarItem(
-          label: 'URLs',
-          icon: Icon(Icons.travel_explore_rounded),
-        )
-      ],
+      ),
     );
   }
-}
 
-class _HomeBody extends StatelessWidget {
-  final int locationsButtonIndex = 0;
-  final UIProvider uiProvider;
+  Widget _getScreenItem(BuildContext context, int i) {
+    AppScreen screen = screens[i];
+    ThemeData theme = Theme.of(context);
 
-  const _HomeBody({required this.uiProvider});
+    return InkWell(
+      child: Container(
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: theme.brightness == Brightness.dark
+              ? Colors.black26
+              : Colors.white,
+          borderRadius: _getBorderRadius(i, screens.length),
+          boxShadow: [
+            BoxShadow(
+              color: theme.brightness == Brightness.dark
+                  ? Colors.black.withOpacity(0.2)
+                  : Colors.grey.withOpacity(0.5),
+              spreadRadius: 1,
+              blurRadius: 3,
+              offset: const Offset(1, 1),
+            ),
+          ],
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(children: [
+              Container(
+                decoration: BoxDecoration(
+                  color: screen.iconColor,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                padding: const EdgeInsets.all(4),
+                child: Icon(
+                  screen.icon,
+                  size: 24,
+                  color: Colors.white,
+                ),
+              ),
+              const SizedBox(width: 10),
+              Text(
+                screen.title,
+                style: theme.textTheme.bodyLarge!.copyWith(
+                  color: theme.brightness == Brightness.dark
+                      ? Colors.white
+                      : Colors.black,
+                ),
+              ),
+            ]),
+            // Icon(scren.icon, size: 20),
+            const Icon(Icons.arrow_forward_ios_rounded, size: 20),
+          ],
+        ),
+      ),
+      onTap: () => Navigator.popAndPushNamed(
+        context,
+        screen.routeName,
+      ),
+    );
+  }
 
-  @override
-  Widget build(BuildContext context) {
-    ScansProvider provider = Provider.of<ScansProvider>(context, listen: false);
-
-    if (uiProvider.currentNavBarIndex == locationsButtonIndex) {
-      provider.getScansByType('LOCATION');
-      return const LocationsContent();
+  BorderRadiusGeometry _getBorderRadius(int i, int length) {
+    Radius radius10 = const Radius.circular(10);
+    if (length == 1) {
+      return BorderRadius.circular(10);
     }
 
-    provider.getScansByType('URL');
-    return const URLAddressContent();
+    if (i == 0) {
+      return BorderRadius.only(topLeft: radius10, topRight: radius10);
+    }
+
+    if (i == length - 1) {
+      return BorderRadius.only(bottomLeft: radius10, bottomRight: radius10);
+    }
+
+    return BorderRadius.zero;
   }
 }

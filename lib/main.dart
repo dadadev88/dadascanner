@@ -1,21 +1,28 @@
-import 'package:dadascanner/providers/global_app_provider.dart';
-import 'package:dadascanner/screens/screens.dart';
-import 'package:dadascanner/utils/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+
+import 'package:dadascanner/screens/screens.dart';
+import 'package:dadascanner/services/pokemons_service.dart';
 import 'package:dadascanner/providers/providers.dart';
 import 'package:dadascanner/utils/preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await PreferencesUtil.initialize();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (_) => UIProvider()),
       ChangeNotifierProvider(create: (_) => ScansProvider()),
       ChangeNotifierProvider(create: (_) => PreferencesProvider()),
-      ChangeNotifierProvider(create: (_) => GlobalAppProvider())
+      ChangeNotifierProvider(create: (_) => GlobalAppProvider()),
+      ChangeNotifierProvider(create: (_) => PokemonsService())
     ],
     child: const MyApp(),
   ));
@@ -37,27 +44,33 @@ class _MyAppState extends State<MyApp> {
 
     return MaterialApp(
       theme: _getTheme(isDarkMode, isUseMaterial3),
-      color: Colors.indigo,
       debugShowCheckedModeBanner: false,
       title: 'Scanner DADADev',
-      initialRoute: ProductScreen.routerName,
+      initialRoute: HomeScreen.routeName,
       routes: {
+        HomeScreen.routeName: (_) => HomeScreen(),
         LoginScreen.routeName: (_) => const LoginScreen(),
-        HomeScreen.routeName: (_) => const HomeScreen(),
+        ScanHomeScreen.routeName: (_) => const ScanHomeScreen(),
         MapScreen.routeName: (_) => const MapScreen(),
-        ProductScreen.routerName: (_) => const ProductScreen(),
+        PokemonsScreen.routeName: (_) => const PokemonsScreen(),
+        PokemonScreen.routeName: (_) => const PokemonScreen(),
+        CapturePokemonScreen.routeName: (_) => const CapturePokemonScreen(),
       },
       themeMode: preferences.themeMode,
     );
   }
 
   ThemeData _getTheme(bool isDarkMode, bool isUseMaterial3) {
-    const AppBarTheme barTheme = AppBarTheme( color: AppColors.primary, titleTextStyle: TextStyle(color: Colors.white, fontSize: 20) );
+    AppBarTheme appBarTheme = const AppBarTheme(elevation: 0);
+    TextTheme textTheme = GoogleFonts.ptSansTextTheme(
+      Theme.of(context).textTheme,
+    );
 
     return isDarkMode
-      ? ThemeData.dark(useMaterial3: isUseMaterial3)
-        .copyWith(appBarTheme: barTheme)
-      : ThemeData.light(useMaterial3: isUseMaterial3)
-        .copyWith(appBarTheme: barTheme);
+        ? ThemeData.dark(useMaterial3: isUseMaterial3)
+            .copyWith(appBarTheme: appBarTheme, textTheme: textTheme)
+        : ThemeData.light(useMaterial3: isUseMaterial3)
+            .copyWith(appBarTheme: appBarTheme, textTheme: textTheme);
+    // .copyWith(appBarTheme: appBarTheme);
   }
 }
